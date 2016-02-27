@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 import scrapy
 import json
 import re
@@ -7,7 +8,7 @@ from scrapy_lagou.items import LagouPositionItem, LagouJobDescItem
 class LagouSpider(scrapy.Spider):
     name = "lagou"
     allowed_domains = ["lagou.com"]
-    npages = 20 # 页数
+    npages = 20 # 页数 TODO
     pn = 1      # page no.
 
     def start_requests(self):
@@ -44,6 +45,7 @@ class LagouSpider(scrapy.Spider):
                 yield scrapy.Request('http://www.lagou.com/jobs/' + str(json_item['positionId']) + '.html',
                         callback = self.parse_job_desc
                         )
+                break
 
         self.pn = self.pn + 1
         if self.pn > 1:
@@ -54,10 +56,6 @@ class LagouSpider(scrapy.Spider):
                     callback = self.parse
                     )
 
-
-    # 解析职位信息json
-    def parse_job_position(self, resp):
-        pass
 
     # 解析职位描述html页面
     def parse_job_desc(self, resp):
@@ -76,3 +74,7 @@ class LagouSpider(scrapy.Spider):
         jd['job_responsibility'] = ''
         jd['job_requirement'] = ''
         yield jd
+
+    def closed(self, reason):
+        self.logger.info(("Please run script `./scrapy_lagou/segmentation.py' "
+            "to do word segmentation and then calculate frequencies of every words"))

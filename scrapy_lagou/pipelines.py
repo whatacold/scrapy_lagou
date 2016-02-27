@@ -13,7 +13,6 @@ import mysql.connector
 class LagouPositionPipeline(object):
 
     # FIXME move below to settings.py
-    table = 'position'
     db = 'lagou'
     user = 'root'
     passwd = ''
@@ -78,7 +77,6 @@ class LagouPositionPipeline(object):
 class LagouJobDescPipeline(object):
 
     # FIXME move below to settings.py
-    table = 'position'
     db = 'lagou'
     user = 'root'
     passwd = ''

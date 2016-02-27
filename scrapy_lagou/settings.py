@@ -16,7 +16,7 @@ NEWSPIDER_MODULE = 'scrapy_lagou.spiders'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'scrapy_lagou (+http://www.yourdomain.com)'
+USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.80 Safari/537.36"
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS=32
@@ -61,9 +61,10 @@ NEWSPIDER_MODULE = 'scrapy_lagou.spiders'
 
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'scrapy_lagou.pipelines.SomePipeline': 300,
-#}
+ITEM_PIPELINES = {
+    'scrapy_lagou.pipelines.LagouPositionPipeline': 300,
+    'scrapy_lagou.pipelines.LagouJobDescPipeline': 400,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html

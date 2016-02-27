@@ -9,7 +9,6 @@ import scrapy
 
 
 class LagouPositionItem(scrapy.Item):
-    # define the fields for your item here like:
     company_short = scrapy.Field()
     company = scrapy.Field()            # company name
     company_id = scrapy.Field()
@@ -26,8 +25,8 @@ class LagouPositionItem(scrapy.Item):
 
 
 class LagouJobDescItem(scrapy.Item):
-    # define the fields for your item here like:
+    position_id = scrapy.Field()
     dept = scrapy.Field()
-    job_desc = scrapy.Field()           # 职位描述
-    # work = scrapy.Field()               # 工作职责
-    # requirement = scrapy.Field()        # 任职要求
+    job_desc = scrapy.Field()           # 职位描述，包括职责与要求
+    job_responsibility = scrapy.Field() # 工作职责
+    job_requirement = scrapy.Field()    # 任职要求

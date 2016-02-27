@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
 import scrapy
 import json
+import re
 from scrapy_lagou.items import LagouPositionItem, LagouJobDescItem
 
 class LagouSpider(scrapy.Spider):
     name = "lagou"
     allowed_domains = ["lagou.com"]
-    #start_urls = [
-    #        "http://www.lagou.com/jobs/positionAjax.json?city=%E6%B7%B1%E5%9C%B3"
-    #        ]
     npages = 20 # 页数
     pn = 1      # page no.
 
@@ -47,10 +45,10 @@ class LagouSpider(scrapy.Spider):
                         callback = self.parse_job_desc
                         )
 
-        # FIXME avoid duplicate
         self.pn = self.pn + 1
-        if self.pn > 2:
+        if self.pn > 1:
             return
+        # FIXME avoid duplicate
         yield scrapy.FormRequest("http://www.lagou.com/jobs/positionAjax.json?city=%E6%B7%B1%E5%9C%B3",
                     formdata = {'kd' : 'C', 'first' : 'false', 'pn' : str(self.pn)},
                     callback = self.parse
@@ -64,8 +62,17 @@ class LagouSpider(scrapy.Spider):
     # 解析职位描述html页面
     def parse_job_desc(self, resp):
         jd = LagouJobDescItem()
-        jd['dept'] = resp.xpath('//*[@id="container"]/div[1]/dl[1]/dt/h1/div/text()')
-        jd['job_desc'] = resp.xpath('//*[@id="container"]/div[1]/dl[1]/dd[2]')
-        # jd.['work'] = resp.xpath()
-        # jd.['requirement'] = resp.xpath()
+        p = re.compile('[^0-9]+([0-9]+)\.html')
+        jd['position_id'] = int(p.sub(r'\1', resp.url))
+
+        jd['dept'] = ''.join(
+                resp.xpath('//*[@id="container"]/div[1]/dl[1]/dt/h1/div/text()').extract()
+                ).strip()
+
+        subtree_root = resp.xpath('//*[@id="container"]/div[1]/dl[1]/dd[2]')[0]
+        jd['job_desc'] = ''.join(
+                [text.extract().strip() for text in subtree_root.xpath('.//text()')]
+                ).strip()
+        jd['job_responsibility'] = ''
+        jd['job_requirement'] = ''
         yield jd

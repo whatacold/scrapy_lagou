@@ -10,7 +10,7 @@ class LagouSpider(scrapy.Spider):
     name = "lagou"
     allowed_domains = ["lagou.com"]
     # FIXME remove hard-coding
-    keyword = 'C++' # candicates: C
+    keyword = 'C' # candicates: C, C++, Python, PHP
     city = u'深圳'
     pn = 1      # page no.
 

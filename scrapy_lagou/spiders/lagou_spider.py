@@ -8,12 +8,13 @@ from scrapy_lagou.items import LagouPositionItem, LagouJobDescItem
 class LagouSpider(scrapy.Spider):
     name = "lagou"
     allowed_domains = ["lagou.com"]
+    keyword = 'C++'
     pn = 1      # page no.
 
     def start_requests(self):
         return [
                 scrapy.FormRequest("http://www.lagou.com/jobs/positionAjax.json?city=%E6%B7%B1%E5%9C%B3",
-                    formdata = {'kd' : 'C', 'first' : 'false', 'pn' : str(self.pn)},
+                    formdata = {'kd' : self.keyword, 'first' : 'false', 'pn' : str(self.pn)},
                     callback = self.parse
                     ),
                 ]
@@ -21,7 +22,7 @@ class LagouSpider(scrapy.Spider):
     def parse(self, resp):
         js = json.loads(resp.body_as_unicode())
         if not js['success']:
-            print 'failed to get json'
+            self.logger.error('failed to get json')
         else:
             for i in range(js['content']['pageSize']):
                 json_item = js['content']['result'][i]
@@ -52,7 +53,7 @@ class LagouSpider(scrapy.Spider):
             return
         # FIXME avoid duplicate
         yield scrapy.FormRequest("http://www.lagou.com/jobs/positionAjax.json?city=%E6%B7%B1%E5%9C%B3",
-                    formdata = {'kd' : 'C', 'first' : 'false', 'pn' : str(self.pn)},
+                    formdata = {'kd' : self.keyword, 'first' : 'false', 'pn' : str(self.pn)},
                     callback = self.parse
                     )
 

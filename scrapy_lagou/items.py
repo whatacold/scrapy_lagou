@@ -9,6 +9,7 @@ import scrapy
 
 
 class LagouPositionItem(scrapy.Item):
+    search_keyword = scrapy.Field()     # 搜索关键字，记点击首页左侧时的关键字
     company_short = scrapy.Field()
     company = scrapy.Field()            # company name
     company_id = scrapy.Field()
@@ -16,6 +17,7 @@ class LagouPositionItem(scrapy.Item):
     education = scrapy.Field()          # 学历要求
     finance_stage = scrapy.Field()
     industry = scrapy.Field()           # 行业
+    city = scrapy.Field()
     position_type = scrapy.Field()      # 职位类型
     position_name = scrapy.Field()
     position_id = scrapy.Field()        # 职位id

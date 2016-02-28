@@ -27,7 +27,7 @@ CREATE TABLE `ignored_word` (
   `word` char(50) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `word` (`word`)
-) ENGINE=InnoDB AUTO_INCREMENT=128 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=105 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -77,12 +77,14 @@ DROP TABLE IF EXISTS `position`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `position` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `search_keyword` char(50) DEFAULT NULL,
   `company_id` int(10) unsigned DEFAULT NULL,
   `company_short` char(255) DEFAULT NULL,
   `company` char(255) DEFAULT NULL,
   `company_size` char(50) DEFAULT NULL,
   `finance_stage` char(50) DEFAULT NULL,
   `industry` char(100) DEFAULT NULL,
+  `city` char(50) DEFAULT NULL,
   `position_id` int(10) unsigned DEFAULT NULL,
   `position_type` char(50) DEFAULT NULL,
   `position_name` char(50) DEFAULT NULL,
@@ -137,4 +139,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-02-28  0:14:00
+-- Dump completed on 2016-02-28 11:51:40

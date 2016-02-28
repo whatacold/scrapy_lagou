@@ -3,17 +3,21 @@
 import scrapy
 import json
 import re
+import urllib
 from scrapy_lagou.items import LagouPositionItem, LagouJobDescItem
 
 class LagouSpider(scrapy.Spider):
     name = "lagou"
     allowed_domains = ["lagou.com"]
-    keyword = 'C++'
+    # FIXME remove hard-coding
+    keyword = 'C++' # candicates: C
+    city = u'深圳'
     pn = 1      # page no.
 
     def start_requests(self):
         return [
-                scrapy.FormRequest("http://www.lagou.com/jobs/positionAjax.json?city=%E6%B7%B1%E5%9C%B3",
+                scrapy.FormRequest(
+                    "http://www.lagou.com/jobs/positionAjax.json?city=" + urllib.quote(self.city.encode('utf8')),
                     formdata = {'kd' : self.keyword, 'first' : 'false', 'pn' : str(self.pn)},
                     callback = self.parse
                     ),
@@ -27,6 +31,7 @@ class LagouSpider(scrapy.Spider):
             for i in range(js['content']['pageSize']):
                 json_item = js['content']['result'][i]
                 position = LagouPositionItem()
+                position['search_keyword'] = self.keyword
                 position['company_short'] = json_item['companyName']
                 position['company'] = json_item['companyShortName']
                 position['company_id'] = json_item['companyId']
@@ -34,6 +39,7 @@ class LagouSpider(scrapy.Spider):
                 position['education'] = json_item['education']
                 position['finance_stage'] = json_item['financeStage']
                 position['industry'] = json_item['industryField']
+                position['city'] = self.city
                 position['position_type'] = json_item['positionType']
                 position['position_name'] = json_item['positionName']
                 position['position_id'] = json_item['positionId']
@@ -52,7 +58,8 @@ class LagouSpider(scrapy.Spider):
                     js['content']['totalPageCount'])
             return
         # FIXME avoid duplicate
-        yield scrapy.FormRequest("http://www.lagou.com/jobs/positionAjax.json?city=%E6%B7%B1%E5%9C%B3",
+        yield scrapy.FormRequest(
+                    "http://www.lagou.com/jobs/positionAjax.json?city=" + urllib.quote(self.city.encode('utf8')),
                     formdata = {'kd' : self.keyword, 'first' : 'false', 'pn' : str(self.pn)},
                     callback = self.parse
                     )

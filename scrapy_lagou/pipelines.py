@@ -46,22 +46,25 @@ class LagouPositionPipeline(object):
             return item
         fmt = (
                 "insert into position "
-                "(company_id, company_short, company, company_size, "
-                "finance_stage, industry, "
+                "(search_keyword, company_id, company_short, company, company_size, "
+                "finance_stage, industry, city, "
                 "position_id, position_type, position_name, "
                 "advantage, salary, work_year, education) "
-                "values (%(company_id)s, %(company_short)s, %(company)s, %(company_size)s, "
-                "%(finance_stage)s, %(industry)s, "
+                "values ("
+                "%(search_keyword)s, %(company_id)s, %(company_short)s, %(company)s, %(company_size)s, "
+                "%(finance_stage)s, %(industry)s, %(city)s, "
                 "%(position_id)s, %(position_type)s, %(position_name)s, "
                 "%(advantage)s, %(salary)s, %(work_year)s, %(education)s)"
                 )
         data = {
+                "search_keyword" : item["search_keyword"],
                 "company_id" : item["company_id"],
                 "company_short" : item["company_short"],
                 "company" : item["company"],
                 "company_size" : item["company_size"],
                 "finance_stage" : item["finance_stage"],
                 "industry" : item["industry"],
+                "city" : item["city"],
                 "position_id" : item["position_id"],
                 "position_type" : item["position_type"],
                 "position_name" : item["position_name"],

@@ -115,6 +115,7 @@ DROP TABLE IF EXISTS `word_frequency`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `word_frequency` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `search_keyword` char(50) DEFAULT NULL,
   `word` char(255) DEFAULT NULL,
   `cnt` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -139,4 +140,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-02-28 11:51:40
+-- Dump completed on 2016-02-28 13:01:37

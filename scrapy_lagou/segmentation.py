@@ -38,8 +38,23 @@ class WordSeg(object):
         self.ignored_words = ignored
 
     def segment(self):
-        query = "select job_desc from job_desc"
+        query = "select distinct search_keyword from position"
         self.cursor.execute(query)
+        keywords = [kw[0] for kw in self.cursor]
+        for kw in keywords:
+            self.segment_one(kw)
+
+    def segment_one(self, keyword):
+        print 'process keyword "%s"' % keyword
+
+        # XXX
+        # `execute' has a nasty bug of string formatting of mysql connector,
+        # when using `%s' and the keyword is 'C++'
+        query = """select job_desc from job_desc jd
+        inner join position p on jd.position_id = p.position_id
+        where p.search_keyword = %(keyword)s
+        """
+        self.cursor.execute(query, {"keyword": keyword})
 
         all_jd = ''
         for jd in self.cursor:
@@ -57,8 +72,8 @@ class WordSeg(object):
 
         for (word, cnt) in counter.iteritems():
             self.cursor.execute(
-                    "insert into word_frequency (word, cnt) values (%s, %s)",
-                    (word, cnt)
+                    "insert into word_frequency (search_keyword, word, cnt) values (%s, %s, %s)",
+                    (keyword, word, cnt)
                     )
 
 if '__main__' == __name__:

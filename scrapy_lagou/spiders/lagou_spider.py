@@ -8,7 +8,19 @@ from scrapy_lagou.items import LagouPositionItem, LagouJobDescItem
 class LagouSpider(scrapy.Spider):
     name = "lagou"
     allowed_domains = ["lagou.com"]
+    keywords = ['C', 'C++', 'PHP', 'Python']
+    keywords = ['C', 'C++']
     pn = 1      # page no.
+
+    def __init__(self, Category = None, *args, **kwargs):
+        super(LagouSpider, self).__init__(*args, **kwargs)
+        self.kw_idx = 0
+
+    def get_keyword(self):
+        return self.keywords[self.kw_idx]
+
+    def next_keyword(self):
+        self.kw_idx = self.kw_idx + 1
 
     def start_requests(self):
         return [

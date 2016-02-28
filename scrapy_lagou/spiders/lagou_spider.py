@@ -8,7 +8,6 @@ from scrapy_lagou.items import LagouPositionItem, LagouJobDescItem
 class LagouSpider(scrapy.Spider):
     name = "lagou"
     allowed_domains = ["lagou.com"]
-    npages = 20 # 页数 TODO
     pn = 1      # page no.
 
     def start_requests(self):
@@ -45,10 +44,11 @@ class LagouSpider(scrapy.Spider):
                 yield scrapy.Request('http://www.lagou.com/jobs/' + str(json_item['positionId']) + '.html',
                         callback = self.parse_job_desc
                         )
-                break
 
         self.pn = self.pn + 1
-        if self.pn > 1:
+        if self.pn > js['content']['totalPageCount']:
+            self.logger.info('Finished crawling %s pages of json feeds' %
+                    js['content']['totalPageCount'])
             return
         # FIXME avoid duplicate
         yield scrapy.FormRequest("http://www.lagou.com/jobs/positionAjax.json?city=%E6%B7%B1%E5%9C%B3",
